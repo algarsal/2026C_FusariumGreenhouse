@@ -1,0 +1,96 @@
+---
+title: "Susceptibility of celery and parsley cultivars to *Fusarium oxysporum* f. sp. *apii* under greenhouse conditions"
+author:
+  - Lajanda Blake
+  - Malea Hilschert
+  - Marta Hernández
+  - Riley White
+  - Tarciso A Ferreira Jr
+format: html
+editor: visual
+---
+
+## GitHub user names
+
+| Group member                | GitHub user name |
+|-----------------------------|------------------|
+| Tarciso Almeida Ferreira Jr | `ferreirajuni0r` |
+| Lajanda Blake               | `lajb-rasta`     |
+| Marta Hernández             | `martaherndez`   |
+| Riley White                 | `qt3-1415`       |
+| Malea Hilschert             | `mhilsch`        |
+
+## Description of the selected data
+
+**Data link:** <https://github.com/ferreirajuni0r/Fusarium-greenhouse-data/blob/main/data/foa4_gh_data.csv>
+
+Seedlings of two celery cultivars (C26 and C42) and two parsley varieties (Curly and Italian) were grown in a greenhouse. Half of the plants were inoculated with isolate KX31 of the soil-borne pathogen *Fusarium oxysporum* f. sp. *apii*, the causal agent of Fusarium yellows of celery, and the other half were left as non-inoculated controls. Plants were assessed twice: at an intermediate time point (plant height only) and at the end of the experiment (plant height, total weight, root weight and vascular discoloration).
+
+### Design and structure
+
+- CSV file with 208 rows (one per plant) and 15 columns.
+- Factorial design: 4 genotypes × 2 treatments = 8 treatment combinations, with 26 plants each.
+- Plants were distributed in 4 greenhouse blocks (6, 6, 6 and 8 plants per treatment combination in blocks 1–4).
+- Dead plants are recorded as 0 for height and weight, so the response variables contain many zeros, especially in inoculated plants.
+
+### Main variables
+
+| Variable | Type | Description |
+|----|----|----|
+| `Plant` | Factor | Crop: celery or parsley |
+| `Variety` | Factor | Genotype: C26, C42, Curly, Italian |
+| `Treatment` | Factor | KX31-inoculated or control |
+| `Block` | Factor | Greenhouse block (1–4) |
+| `Rep` (with a trailing space) | Factor | Plant identifier within each treatment combination (R1–R26) |
+| `Rep` | Integer | Plant position within a block |
+| `PlantVar`, `PlantVarTreat`, `TreatCode` | Factor | Combined labels: genotype, genotype × treatment, and treatment code (T1–T8) |
+| `height_middle` | Continuous | Plant height at the first assessment (cm) |
+| `height_final` | Continuous | Plant height at the final assessment (cm) |
+| `Total_weight` | Continuous | Total plant weight at the end (g) |
+| `Roots_weight` | Continuous | Root weight at the end (g) |
+| `Perc_discoloration` | Continuous (0–100 %) | Percentage of vascular discoloration |
+| `Rate_discoloration` | Ordinal (0–6) | Disease severity score |
+
+## Objectives, research questions and hypotheses
+
+### Objective
+
+To evaluate the virulence of *F. oxysporum* f. sp. *apii* isolate KX31 on celery and parsley, and to compare the susceptibility of two celery cultivars and two parsley varieties.
+
+### Research questions
+
+1.  Does inoculation with KX31 increase plant mortality, and does mortality differ among genotypes?
+2.  Does inoculation reduce plant growth (height, total weight, root weight) and cause disease symptoms (vascular discoloration) compared with non-inoculated controls?
+3.  Does the effect of inoculation differ among genotypes, i.e. are some cultivars or varieties more susceptible than others?
+4.  Are celery cultivars more affected than parsley varieties?
+5.  Does the effect of inoculation on plant height increase from the intermediate to the final assessment?
+6.  Is disease severity related to plant growth?
+
+### Hypotheses
+
+- **H1:** Mortality is higher in inoculated plants than in controls.
+- **H2:** Inoculated plants have lower height, total weight and root weight, and higher discoloration, than control plants.
+- **H3:** There is a genotype × treatment interaction: the effect of KX31 differs among cultivars and varieties.
+- **H4:** Celery, the main host of *F. oxysporum* f. sp. *apii*, is more affected than parsley.
+- **H5:** Differences in height between inoculated and control plants are larger at the final assessment than at the intermediate one, as disease progresses.
+- **H6:** Plants with higher discoloration have lower total and root weight.
+
+## Analyses
+
+The analysis follows a pipeline from simple to more advanced methods, so that each step builds on the previous one.
+
+1.  **Data import and cleaning** (`tidyverse`)
+    - Rename the two columns that share the name `Rep`.
+    - Rebuild the treatment code from `Variety` and `Treatment`, since `TreatCode` is inconsistent in some rows.
+    - Convert design variables to factors and set the control as the reference level.
+    - Check missing values, duplicated block positions and inconsistent records (e.g. plants with a final height of 0 but a weight above 0).
+    - Create a binary variable for plant death.
+2.  **Exploratory analysis** (`ggplot2`): number of plants, dead plants and missing values per group; descriptive statistics (mean, SD, SE) per genotype × treatment; boxplots with individual points.
+3.  **Mortality:** proportion of dead plants per group, compared between inoculated and control plants within each genotype with Fisher's exact test, and among genotypes with logistic regression (`Treatment × Variety + Block`).
+4.  **Growth of surviving plants** (`height_final`, `Total_weight`, `Roots_weight`): two-way ANOVA with `Variety`, `Treatment`, their interaction and `Block`. Checking of assumptions (Q–Q plots, residuals vs fitted values, Levene's test), with log transformation or a Gamma GLM if needed.
+5.  **Pairwise comparisons** (`emmeans`): inoculated vs control within each genotype, and genotypes within each treatment (Tukey adjustment), with compact letter displays. A planned contrast compares celery and parsley.
+6.  **Plant height over time:** linear mixed model (`lme4`) with `Variety`, `Treatment`, assessment time and their interactions as fixed effects, `Block` as a fixed effect and plant as a random effect.
+7.  **Disease severity:** percentage of discoloration compared among groups with Kruskal–Wallis and Dunn tests; severity score analyzed with an ordinal regression model (`ordinal::clm`).
+8.  **Relationships among variables:** Spearman correlations between discoloration and growth variables, and regression of weight on discoloration by crop.
+9.  **Extension:** a model that keeps the dead plants (e.g. a Tweedie or zero-inflated GLMM with `glmmTMB`, checked with `DHARMa`), to compare its conclusions with those of steps 3–5.
+10. **Reproducible reporting:** analyses written in Quarto, with code and data version-controlled on GitHub.
