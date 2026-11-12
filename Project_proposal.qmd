@@ -36,7 +36,7 @@ Seedlings of two celery cultivars (C26 and C42) and two parsley varieties (Curly
 ### Main variables
 
 | Variable | Type | Description |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | `Plant` | Factor | Crop: celery or parsley |
 | `Variety` | Factor | Genotype: C26, C42, Curly, Italian |
 | `Treatment` | Factor | KX31-inoculated or control |
@@ -96,3 +96,5 @@ The analysis follows a pipeline from simple to more advanced methods, so that ea
 10. **Reproducible reporting:** analyses written in Quarto, with code and data version-controlled on GitHub.
 
 meaningless change
+
+meaningless change 2 :)
