@@ -96,5 +96,3 @@ The analysis follows a pipeline from simple to more advanced methods, so that ea
 10. **Reproducible reporting:** analyses written in Quarto, with code and data version-controlled on GitHub.
 
 meaningless change
-
-we will stand through this
