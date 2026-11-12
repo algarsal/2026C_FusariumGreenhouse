@@ -94,3 +94,5 @@ The analysis follows a pipeline from simple to more advanced methods, so that ea
 8.  **Relationships among variables:** Spearman correlations between discoloration and growth variables, and regression of weight on discoloration by crop.
 9.  **Extension:** a model that keeps the dead plants (e.g. a Tweedie or zero-inflated GLMM with `glmmTMB`, checked with `DHARMa`), to compare its conclusions with those of steps 3–5.
 10. **Reproducible reporting:** analyses written in Quarto, with code and data version-controlled on GitHub.
+
+meaningless change
