@@ -10,7 +10,42 @@ This will be my part xoxo Malea
 
 How to import data
 ```{r}
-library(readxl)
-file_path_Malea <- "/Users/maleahilschert/Documents/MASTERPlantHealth/M1:1_UPV/Data_Acquisition/GroupProject/Foa4_23_virulence_data_.xls"
-F2 <- read_excel(file_path_Malea, sheet = 1)
+load("data/fusarium.Rdata")
 ```
+
+We are checking for
+Effect of the pathogen on celery (both varieties each) and then pairwise test to prove that they have similar susceptibility
+effect of the pathogen on parsley (both varieties each)
+
+1. First Shapiro Wilk to check residuals
+2. t-test to compare celery varieties susceptibility 
+3. ANOVA for parsley-italien, parsley-curly, & both celery varieties (i.e. if celery similar susceptibility) one anova for each 
+
+Test to see if residuals are distributed normally
+```{r}
+
+names(F1)
+celery <- F1 |> dplyr::filter(Plant == "Celery", height_final > 0)
+# keeps only surviving plants
+
+m <- aov(Total_weight ~ Variety * Treatment + Block, data = celery) # not good
+
+shapiro.test(residuals(m))
+# differences within a group are distributed normal (high p-value)
+
+plot(m, 2)
+```
+
+
+```{r}
+
+
+
+
+```
+
+
+
+
+
+
