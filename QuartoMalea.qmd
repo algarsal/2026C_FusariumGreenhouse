@@ -6,3 +6,11 @@ editor: visual
 ---
 
 This will be my part xoxo Malea
+
+
+How to import data
+```{r}
+library(readxl)
+file_path_Malea <- "/Users/maleahilschert/Documents/MASTERPlantHealth/M1:1_UPV/Data_Acquisition/GroupProject/Foa4_23_virulence_data_.xls"
+F2 <- read_excel(file_path_Malea, sheet = 1)
+```
