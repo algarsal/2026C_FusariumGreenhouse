@@ -8,5 +8,5 @@ F1 <- F1[-c(7, 11)]
 save(F1, file = "data/fusarium.Rdata")
 
 
-#For every new scriot 
+#For every new script 
 load("data/fusarium.Rdata")
