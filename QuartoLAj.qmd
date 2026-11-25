@@ -1,0 +1,128 @@
+---
+title: "Analysis - Laj"
+author: "Lajanda"
+format: html
+editor: visual
+---
+
+## Analysissssssssssssssssss
+
+```{r}
+load("data/fusarium.Rdata")
+summary(F1)
+
+#Change the columns with charater variables to categorical variables
+F1$Plant <- as.factor(F1$Plant)
+F1$Variety <- as.factor(F1$Variety)
+F1$Treatment <- as.factor(F1$Treatment)
+F1$Block <- as.factor(F1$Block)
+F1$PlantVar <- as.factor(F1$PlantVar)
+F1$PlantVarTreat <- as.factor(F1$PlantVarTreat)
+
+str(F1)
+
+
+```
+
+Plant height
+
+```{r}
+
+
+# mean plant height
+by(F1$height_final, F1$PlantVarTreat, mean, na.rm = TRUE)
+
+# SD
+by(F1$height_final, F1$PlantVarTreat, sd, na.rm = TRUE)
+
+
+model_height <- aov(height_final ~ PlantVarTreat + Block, data = F1)
+
+summary(model_height)
+
+
+TukeyHSD(model_height)
+
+
+par(mar = c(10, 4, 4, 2))
+
+boxplot(height_final ~ PlantVarTreat, data = F1,
+        las = 2,
+        cex.axis = 0.7,
+        ylab = "Plant height",
+        xlab = "",
+        main = "Plant height by variety and treatment")
+
+
+plot(model_height)
+
+```
+
+Plant height differed among the eight plant variety-treatment combinations (ANOVA, p \< 0.001). Block had no significant effect on plant height (p= 0.248).
+
+Total Weight
+
+```{r}
+by(F1$Total_weight, F1$PlantVarTreat, mean, na.rm = TRUE)
+by(F1$Total_weight, F1$PlantVarTreat, sd, na.rm = TRUE)
+
+boxplot(Total_weight ~ PlantVarTreat, data = F1,
+        las = 2,
+        cex.axis = 0.7,
+        ylab = "Total weight",
+        xlab = "Variety and treatment",
+        main = "Total plant weight by variety and treatment")
+
+model_weight <- aov(Total_weight ~ PlantVarTreat + Block, data = F1)
+
+summary(model_weight)
+
+TukeyHSD(model_weight, "PlantVarTreat")
+
+plot(model_weight)
+```
+
+Total plant weight is different among the eight variety-treatment combinations ANOVA \< 0.001). Block had no significant effect p = 0.356.
+
+Root Weight
+
+```{r}
+by(F1$Roots_weight, F1$PlantVarTreat, mean, na.rm = TRUE)
+
+by(F1$Roots_weight, F1$PlantVarTreat, sd, na.rm = TRUE)
+
+
+boxplot(Roots_weight ~ PlantVarTreat, data = F1,
+        las = 2,
+        cex.axis = 0.7,
+        ylab = "Root weight",
+        xlab = "Variety and treatment",
+        main = "Root weight by variety and treatment")
+model_roots <- aov(Roots_weight ~ PlantVarTreat + Block, data = F1)
+
+summary(model_roots)
+
+TukeyHSD(model_roots, "PlantVarTreat")
+
+plot(model_roots)
+
+```
+
+Percentage of discoloration
+
+```{r}
+by(F1$Perc_discoloration, F1$PlantVarTreat, mean, na.rm = TRUE)
+by(F1$Perc_discoloration, F1$PlantVarTreat, sd, na.rm = TRUE)
+par(mar = c(10, 4, 4, 2))
+
+boxplot(Perc_discoloration ~ PlantVarTreat, data = F1,
+        las = 2,
+        cex.axis = 0.7,
+        ylab = "Discoloration (%)",
+        xlab = "",
+        main = "Percentage of discoloration by variety and treatment")
+model_discoloration <- aov(Perc_discoloration ~ PlantVarTreat + Block, data = F1)
+
+summary(model_discoloration)
+TukeyHSD(model_discoloration, "PlantVarTreat")
+```
