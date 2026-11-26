@@ -7,45 +7,61 @@ editor: visual
 
 This will be my part xoxo Malea
 
-
 How to import data
+
 ```{r}
 load("data/fusarium.Rdata")
 ```
 
-We are checking for
-Effect of the pathogen on celery (both varieties each) and then pairwise test to prove that they have similar susceptibility
-effect of the pathogen on parsley (both varieties each)
+We are checking for Effect of the pathogen on celery (both varieties each) and then pairwise test to prove that they have similar susceptibility effect of the pathogen on parsley (both varieties each)
 
-1. First Shapiro Wilk to check residuals
-2. t-test to compare celery varieties susceptibility 
-3. ANOVA for parsley-italien, parsley-curly, & both celery varieties (i.e. if celery similar susceptibility) one anova for each 
+1.  First Shapiro Wilk to check residuals
+2.  t-test to compare celery varieties susceptibility
+3.  ANOVA for parsley-italien, parsley-curly, & both celery varieties (i.e. if celery similar susceptibility) one anova for each
 
-Test to see if residuals are distributed normally
-```{r}
-
-names(F1)
-celery <- F1 |> dplyr::filter(Plant == "Celery", height_final > 0)
-# keeps only surviving plants
-
-m <- aov(Total_weight ~ Variety * Treatment + Block, data = celery) # not good
-
-shapiro.test(residuals(m))
-# differences within a group are distributed normal (high p-value)
-
-plot(m, 2)
-```
-
+Shapiro-Wilk
 
 ```{r}
+F1$Block <- factor(F1$Block)
+F1$Total_weight <- as.numeric(F1$Total_weight)
 
 
+m_italian <- lm(Total_weight ~ Treatment + Block, data = subset(F1, Variety == "Italian"))
+m_curly   <- lm(Total_weight ~ Treatment + Block, data = subset(F1, Variety == "Curly"))
+m_c26 <- lm(Total_weight ~ Treatment + Block, data = subset(F1, Variety == "C26"))
+m_c42 <- lm(Total_weight ~ Treatment + Block, data = subset(F1, Variety == "C42"))
+# Total_weight ~ Treatment + Block = total weight depends on whether the plant was inoculated (Treatment) and which greenhouse block it was in (Block)
+
+
+
+# Shapiro-Wilk on the residuals
+shapiro.test(residuals(m_italian))
+# p = 0.004515
+shapiro.test(residuals(m_curly))
+# p-value = 0.006208
+shapiro.test(residuals(m_c26))
+# p-value = 0.6798
+shapiro.test(residuals(m_c42))
+# p-value = 0.394
+
+## -> parsley not normally distributed (no ANOVA)
+## -> clery normally distributed -> ANOVA possible
+
+# Beim Shapiro-Wilk-Test lautet die Nullhypothese „die Residuen sind normalverteilt“. Ist p > 0,05, wird sie nicht abgelehnt und die Annahme gilt als erfüllt. Ist p < 0,05, sind die Residuen signifikant nicht normalverteilt
 
 
 ```
 
+ANOVA for celery
+
+```{r}
+
+anova(m_c26)
+# p-value = 2.196e-09 *** (< 0.05)
+# So inoculated and control C26 plants differ significantly in total weight
+anova(m_c42)
+# p-value = <2e-16 *** (< 0.05)
+# So inoculated and control C42 plants differ significantly in total weight
 
 
-
-
-
+```
