@@ -103,14 +103,162 @@ shapiro.test(residuals(d_c42))
 
 
 
+LAJANDAS PLOTS
+## Analysissssssssssssssssss
+
+```{r}
+load("data/fusarium.Rdata")
+summary(F1)
+
+#Change the columns with charater variables to categorical variables
+F1$Plant <- as.factor(F1$Plant)
+F1$Variety <- as.factor(F1$Variety)
+F1$Treatment <- as.factor(F1$Treatment)
+F1$Block <- as.factor(F1$Block)
+F1$PlantVar <- as.factor(F1$PlantVar)
+F1$PlantVarTreat <- as.factor(F1$PlantVarTreat)
+
+str(F1)
+
+
+```
+
+
+Plant height
+
+```{r}
+
+
+# mean plant height
+by(F1$height_final, F1$PlantVarTreat, mean, na.rm = TRUE)
+
+# SD
+by(F1$height_final, F1$PlantVarTreat, sd, na.rm = TRUE)
+
+
+model_height <- aov(height_final ~ PlantVarTreat + Block, data = F1)
+
+summary(model_height)
+
+
+TukeyHSD(model_height)
+
+
+# fix the order of the groups
+lvls <- c("Celery_C26_Control",    "Celery_C26_KX31-inoculated",
+          "Celery_C42_Control",    "Celery_C42_KX31-inoculated",
+          "Parsley_Curly_Control", "Parsley_Curly_KX31-inoculated",
+          "Parsley_Italian_Control","Parsley_Italian_KX31-inoculated")
+F1$PlantVarTreat <- factor(F1$PlantVarTreat, levels = lvls)
+
+# one colour per variety: light = control, dark = inoculated
+cols <- c("#a6cee3", "#1f78b4",   # C26
+          "darkolivegreen3", "forestgreen",   # C42
+          "burlywood2", "darkorange",   # Curly
+          "thistle", "darkorchid2")   # Italian
+
+# box positions: pairs close together, gaps between varieties
+pos <- c(1, 2,  3.5, 4.5,  6.5, 7.5,  9, 10)
+
+par(mar = c(5, 4, 4, 9))   # extra space on the right for the legend
+
+boxplot(height_final ~ PlantVarTreat, data = F1,
+        at = pos, col = cols,
+        xaxt = "n", xlab = "",
+        ylab = "Plant height (cm)",
+        main = "Plant height by variety and treatment")
+
+# variety names under each pair
+axis(1, at = c(1.5, 4, 7, 9.5), labels = c("C26", "C42", "Curly", "Italian"), tick = FALSE)
+
+# crop names below
+mtext(c("Celery", "Parsley"), side = 1, line = 3, at = c(2.75, 8.25), font = 2)
+
+# dashed line between celery and parsley
+abline(v = 5.5, lty = 2, col = "grey60")
+
+# legend outside the plot on the right
+legend("topright", inset = c(-0.28, 0), xpd = TRUE, bty = "n",
+       title = "Treatment",
+       legend = c("Control (light)", "KX31-inoculated (dark)"),
+       fill = c("grey85", "grey35"))
+colors()
+
+plot(model_height)
+
+```
 
 
 
 
 
 
+Total Weight
+
+```{r}
+by(F1$Total_weight, F1$PlantVarTreat, mean, na.rm = TRUE)
+by(F1$Total_weight, F1$PlantVarTreat, sd, na.rm = TRUE)
+
+boxplot(Total_weight ~ PlantVarTreat, data = F1,
+        las = 2,
+        cex.axis = 0.7,
+        ylab = "Total weight",
+        xlab = "Variety and treatment",
+        main = "Total plant weight by variety and treatment")
+
+model_weight <- aov(Total_weight ~ PlantVarTreat + Block, data = F1)
+
+summary(model_weight)
+
+TukeyHSD(model_weight, "PlantVarTreat")
+
+plot(model_weight)
+```
+
+Total plant weight is different among the eight variety-treatment combinations ANOVA \< 0.001). Block had no significant effect p = 0.356.
+
+Root Weight
+
+```{r}
+by(F1$Roots_weight, F1$PlantVarTreat, mean, na.rm = TRUE)
+
+by(F1$Roots_weight, F1$PlantVarTreat, sd, na.rm = TRUE)
 
 
+boxplot(Roots_weight ~ PlantVarTreat, data = F1,
+        las = 2,
+        cex.axis = 0.7,
+        ylab = "Root weight",
+        xlab = "Variety and treatment",
+        main = "Root weight by variety and treatment")
+model_roots <- aov(Roots_weight ~ PlantVarTreat + Block, data = F1)
+
+summary(model_roots)
+
+TukeyHSD(model_roots, "PlantVarTreat")
+
+plot(model_roots)
+
+```
+
+Percentage of discoloration
+
+```{r}
+by(F1$Perc_discoloration, F1$PlantVarTreat, mean, na.rm = TRUE)
+by(F1$Perc_discoloration, F1$PlantVarTreat, sd, na.rm = TRUE)
+par(mar = c(10, 4, 4, 2))
+
+boxplot(Perc_discoloration ~ PlantVarTreat, data = F1,
+        las = 2,
+        cex.axis = 0.7,
+        ylab = "Discoloration (%)",
+        xlab = "",
+        main = "Percentage of discoloration by variety and treatment")
+model_discoloration <- aov(Perc_discoloration ~ PlantVarTreat + Block, data = F1)
+
+summary(model_discoloration)
+TukeyHSD(model_discoloration, "PlantVarTreat")
+```
 
 
 
