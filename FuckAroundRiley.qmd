@@ -1,0 +1,19 @@
+---
+title: "FuckAroundRiley"
+format: html
+---
+
+```{r}
+library(dplyr)
+data <- F1
+celery <- F1 %>% dplyr::filter(Plant == "Celery",
+                Treatment == "KX31-inoculated")
+
+shapiro.test(height_final ~ PlantVar, celery)
+shapiro.test(Total_weight ~ PlantVar, celery)
+shaprio.test(Rate_discoloration ~ PlantVar, celery)
+
+t.test(height_final ~ PlantVar, celery)
+t.test(Total_weight ~ PlantVar, celery)
+t.test(Rate_discoloration ~ PlantVar, celery)
+```
