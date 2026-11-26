@@ -19,29 +19,31 @@ We are checking for Effect of the pathogen on celery (both varieties each) and t
 2.  t-test to compare celery varieties susceptibility
 3.  ANOVA for parsley-italien, parsley-curly, & both celery varieties (i.e. if celery similar susceptibility) one anova for each
 
-Shapiro-Wilk
+we will check the final height, total weight and discoloration
+
+Shapiro-Wilk WEIGHT
 
 ```{r}
 F1$Block <- factor(F1$Block)
 F1$Total_weight <- as.numeric(F1$Total_weight)
 
 
-m_italian <- lm(Total_weight ~ Treatment + Block, data = subset(F1, Variety == "Italian"))
-m_curly   <- lm(Total_weight ~ Treatment + Block, data = subset(F1, Variety == "Curly"))
-m_c26 <- lm(Total_weight ~ Treatment + Block, data = subset(F1, Variety == "C26"))
-m_c42 <- lm(Total_weight ~ Treatment + Block, data = subset(F1, Variety == "C42"))
+w_italian <- lm(Total_weight ~ Treatment, data = subset(F1, Variety == "Italian"))
+w_curly   <- lm(Total_weight ~ Treatment, data = subset(F1, Variety == "Curly"))
+w_c26 <- lm(Total_weight ~ Treatment, data = subset(F1, Variety == "C26"))
+w_c42 <- lm(Total_weight ~ Treatment, data = subset(F1, Variety == "C42"))
 # Total_weight ~ Treatment + Block = total weight depends on whether the plant was inoculated (Treatment) and which greenhouse block it was in (Block)
 
 
 
 # Shapiro-Wilk on the residuals
-shapiro.test(residuals(m_italian))
+shapiro.test(residuals(w_italian))
 # p = 0.004515
-shapiro.test(residuals(m_curly))
+shapiro.test(residuals(w_curly))
 # p-value = 0.006208
-shapiro.test(residuals(m_c26))
+shapiro.test(residuals(w_c26))
 # p-value = 0.6798
-shapiro.test(residuals(m_c42))
+shapiro.test(residuals(w_c42))
 # p-value = 0.394
 
 ## -> parsley not normally distributed (no ANOVA)
@@ -65,3 +67,65 @@ anova(m_c42)
 
 
 ```
+
+
+
+For height
+```{r}
+h_italian <- lm(height_final ~ Treatment, data = subset(F1, Variety == "Italian"))
+h_curly   <- lm(height_final ~ Treatment, data = subset(F1, Variety == "Curly"))
+h_c26 <- lm(height_final ~ Treatment, data = subset(F1, Variety == "C26"))
+h_c42 <- lm(height_final ~ Treatment, data = subset(F1, Variety == "C42"))
+
+shapiro.test(residuals(h_italian))
+shapiro.test(residuals(h_curly))
+shapiro.test(residuals(h_c26))
+shapiro.test(residuals(h_c42))
+```
+
+
+Discoloration
+```{r}
+d_italian <- lm(Perc_discoloration ~ Treatment, data = subset(F1, Variety == "Italian"))
+d_curly   <- lm(Perc_discoloration ~ Treatment, data = subset(F1, Variety == "Curly"))
+d_c26 <- lm(Perc_discoloration ~ Treatment, data = subset(F1, Variety == "C26"))
+d_c42 <- lm(Perc_discoloration ~ Treatment, data = subset(F1, Variety == "C42"))
+
+shapiro.test(residuals(d_italian))
+shapiro.test(residuals(d_curly))
+shapiro.test(residuals(d_c26))
+shapiro.test(residuals(d_c42))
+
+## not normally distributed so flop
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
