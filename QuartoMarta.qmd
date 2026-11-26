@@ -1,0 +1,11 @@
+---
+title: "QuartoMarta"
+format: html
+editor: visual
+---
+
+```{r}
+load("data/fusarium.Rdata") #to load the data
+
+c26 <- subset(F1, PlantVar == "Celery_C26") #to use only the data for celery C26
+ ```
