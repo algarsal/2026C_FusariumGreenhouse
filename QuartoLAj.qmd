@@ -44,14 +44,44 @@ summary(model_height)
 TukeyHSD(model_height)
 
 
-par(mar = c(10, 4, 4, 2))
+# fix the order of the groups
+lvls <- c("Celery_C26_Control",    "Celery_C26_KX31-inoculated",
+          "Celery_C42_Control",    "Celery_C42_KX31-inoculated",
+          "Parsley_Curly_Control", "Parsley_Curly_KX31-inoculated",
+          "Parsley_Italian_Control","Parsley_Italian_KX31-inoculated")
+F1$PlantVarTreat <- factor(F1$PlantVarTreat, levels = lvls)
+
+# one colour per variety: light = control, dark = inoculated
+cols <- c("lightblue", "steelblue",   # C26
+          "lightgreen", "#33a02c",   # C42
+          "#fdbf6f", "#ff7f00",   # Curly
+          "#cab2d6", "#6a3d9a")   # Italian
+
+# box positions: pairs close together, gaps between varieties
+pos <- c(1, 2,  3.5, 4.5,  6.5, 7.5,  9, 10)
+
+par(mar = c(5, 4, 4, 9))   # extra space on the right for the legend
 
 boxplot(height_final ~ PlantVarTreat, data = F1,
-        las = 2,
-        cex.axis = 0.7,
-        ylab = "Plant height",
-        xlab = "",
+        at = pos, col = cols,
+        xaxt = "n", xlab = "",
+        ylab = "Plant height (cm)",
         main = "Plant height by variety and treatment")
+
+# variety names under each pair
+axis(1, at = c(1.5, 4, 7, 9.5), labels = c("C26", "C42", "Curly", "Italian"), tick = FALSE)
+
+# crop names below
+mtext(c("Celery", "Parsley"), side = 1, line = 3, at = c(2.75, 8.25), font = 2)
+
+# dashed line between celery and parsley
+abline(v = 5.5, lty = 2, col = "grey60")
+
+# legend outside the plot on the right
+legend("topright", inset = c(-0.28, 0), xpd = TRUE, bty = "n",
+       title = "Treatment",
+       legend = c("Control (light)", "KX31-inoculated (dark)"),
+       fill = c("grey85", "grey35"))
 
 
 plot(model_height)
@@ -66,18 +96,28 @@ Total Weight
 by(F1$Total_weight, F1$PlantVarTreat, mean, na.rm = TRUE)
 by(F1$Total_weight, F1$PlantVarTreat, sd, na.rm = TRUE)
 
+par(mar = c(5, 4, 4, 9))
+
 boxplot(Total_weight ~ PlantVarTreat, data = F1,
-        las = 2,
-        cex.axis = 0.7,
-        ylab = "Total weight",
-        xlab = "Variety and treatment",
+        at = pos, col = cols,
+        xaxt = "n", xlab = "",
+        ylab = "Total weight (g)",
         main = "Total plant weight by variety and treatment")
+
+axis(1, at = c(1.5, 4, 7, 9.5), labels = c("C26", "C42", "Curly", "Italian"), tick = FALSE)
+mtext(c("Celery", "Parsley"), side = 1, line = 3, at = c(2.75, 8.25), font = 2)
+abline(v = 5.5, lty = 2, col = "grey60")
+legend("topright", inset = c(-0.28, 0), xpd = TRUE, bty = "n",
+       title = "Treatment",
+       legend = c("Control (light)", "KX31-inoculated (dark)"),
+       fill = c("grey85", "grey35"))
 
 model_weight <- aov(Total_weight ~ PlantVarTreat + Block, data = F1)
 
 summary(model_weight)
 
 TukeyHSD(model_weight, "PlantVarTreat")
+
 
 plot(model_weight)
 ```
@@ -92,12 +132,22 @@ by(F1$Roots_weight, F1$PlantVarTreat, mean, na.rm = TRUE)
 by(F1$Roots_weight, F1$PlantVarTreat, sd, na.rm = TRUE)
 
 
+par(mar = c(5, 4, 4, 9))
+
 boxplot(Roots_weight ~ PlantVarTreat, data = F1,
-        las = 2,
-        cex.axis = 0.7,
-        ylab = "Root weight",
-        xlab = "Variety and treatment",
+        at = pos, col = cols,
+        xaxt = "n", xlab = "",
+        ylab = "Root weight (g)",
         main = "Root weight by variety and treatment")
+
+axis(1, at = c(1.5, 4, 7, 9.5), labels = c("C26", "C42", "Curly", "Italian"), tick = FALSE)
+mtext(c("Celery", "Parsley"), side = 1, line = 3, at = c(2.75, 8.25), font = 2)
+abline(v = 5.5, lty = 2, col = "grey60")
+legend("topright", inset = c(-0.28, 0), xpd = TRUE, bty = "n",
+       title = "Treatment",
+       legend = c("Control (light)", "KX31-inoculated (dark)"),
+       fill = c("grey85", "grey35"))
+
 model_roots <- aov(Roots_weight ~ PlantVarTreat + Block, data = F1)
 
 summary(model_roots)
@@ -113,14 +163,23 @@ Percentage of discoloration
 ```{r}
 by(F1$Perc_discoloration, F1$PlantVarTreat, mean, na.rm = TRUE)
 by(F1$Perc_discoloration, F1$PlantVarTreat, sd, na.rm = TRUE)
-par(mar = c(10, 4, 4, 2))
+
+par(mar = c(5, 4, 4, 9))
 
 boxplot(Perc_discoloration ~ PlantVarTreat, data = F1,
-        las = 2,
-        cex.axis = 0.7,
+        at = pos, col = cols,
+        xaxt = "n", xlab = "",
         ylab = "Discoloration (%)",
-        xlab = "",
+        ylim = c(0, 100),
         main = "Percentage of discoloration by variety and treatment")
+
+axis(1, at = c(1.5, 4, 7, 9.5), labels = c("C26", "C42", "Curly", "Italian"), tick = FALSE)
+mtext(c("Celery", "Parsley"), side = 1, line = 3, at = c(2.75, 8.25), font = 2)
+abline(v = 5.5, lty = 2, col = "grey60")
+legend("topright", inset = c(-0.28, 0), xpd = TRUE, bty = "n",
+       title = "Treatment",
+       legend = c("Control (light)", "KX31-inoculated (dark)"),
+       fill = c("grey85", "grey35"))
 model_discoloration <- aov(Perc_discoloration ~ PlantVarTreat + Block, data = F1)
 
 summary(model_discoloration)
