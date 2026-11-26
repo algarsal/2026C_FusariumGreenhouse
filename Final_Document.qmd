@@ -1,0 +1,98 @@
+---
+title: "Final_Document"
+format: html
+editor: visual
+---
+
+1. Title: "Susceptibility of celery and parsley cultivars to *Fusarium oxysporum* f. sp. *apii* under greenhouse conditions" 
+
+2. Team members names: 
+- Lajanda Blake 
+- Malea Hilschert 
+- Marta Hernández 
+- Riley White 
+- Tarciso A Ferreira Jr
+
+
+3. Introduction. Why your project is interesting? and What is known already about it? Most citations should be done in the introduction.
+
+
+
+
+
+
+4. Objectives and hypotheses.
+
+Objective: 
+To evaluate the virulence of *F. oxysporum* f. sp. *apii* isolate KX31 on celery and parsley, and to compare the susceptibility of two celery cultivars and two parsley varieties.
+
+Hypotheses:
+Our hypotheses is that even if we dont do the the GLMM analyses we should still get the same results.
+
+
+
+
+
+5. Methods. Explain the origin and structure of your data. What have you done? And what did you use to do it? Step by step, so anyone could do it again by reading this part.
+
+
+
+
+
+
+6. Results. Figures and tables with captions and description of what do they mean. Never include citations in this part. This is only your work.
+
+
+
+
+
+
+
+7. Discussion. From your objectives.
+
+
+
+
+
+
+
+8. Conclusions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
